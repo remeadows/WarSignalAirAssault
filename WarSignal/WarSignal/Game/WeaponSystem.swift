@@ -27,6 +27,11 @@ final class WeaponSystem {
     private var availableSparks: [Entity] = []
     private let maxSparks = 20
 
+    /// Explosion effect pool (for rockets)
+    private var explosionEffects: [Entity] = []
+    private var activeExplosions: [(entity: Entity, timer: Float)] = []
+    private let maxExplosions = 8
+
     /// Fire rate tracking
     private var lastFireTime: [WeaponType: Float] = [:]
     private var gameTime: Float = 0
@@ -65,6 +70,9 @@ final class WeaponSystem {
         // Create impact spark pool
         createImpactSparkPool(parent: parent)
 
+        // Create explosion effect pool
+        createExplosionEffectPool(parent: parent)
+
         // Initialize fire times
         for weapon in WeaponType.allCases {
             lastFireTime[weapon] = -999 // Allow immediate first shot
@@ -101,6 +109,22 @@ final class WeaponSystem {
             parent.addChild(spark)
             impactSparks.append(spark)
             availableSparks.append(spark)
+        }
+    }
+
+    private func createExplosionEffectPool(parent: Entity) {
+        let mesh = MeshResource.generateSphere(radius: 1.0)
+        var material = UnlitMaterial()
+        material.color = .init(tint: UIColor(red: 1.0, green: 0.5, blue: 0.1, alpha: 1.0))
+
+        for i in 0..<maxExplosions {
+            let explosion = Entity()
+            explosion.name = "Explosion_\(i)"
+            explosion.components[ModelComponent.self] = ModelComponent(mesh: mesh, materials: [material])
+            explosion.isEnabled = false
+            explosion.scale = SIMD3<Float>(repeating: 0.1)
+            parent.addChild(explosion)
+            explosionEffects.append(explosion)
         }
     }
 
@@ -191,6 +215,34 @@ final class WeaponSystem {
         // For now, we'll handle this in update
     }
 
+    private func showExplosion(at position: SIMD3<Float>, radius: Float) {
+        guard let explosion = explosionEffects.first(where: { !$0.isEnabled }) else { return }
+
+        explosion.position = position
+        explosion.scale = SIMD3<Float>(repeating: 0.2)
+        explosion.isEnabled = true
+
+        activeExplosions.append((entity: explosion, timer: 0))
+    }
+
+    private func updateExplosions(deltaTime: Float) {
+        for i in (0..<activeExplosions.count).reversed() {
+            activeExplosions[i].timer += deltaTime
+            let progress = activeExplosions[i].timer / 0.4 // 0.4 second duration
+
+            if progress >= 1.0 {
+                activeExplosions[i].entity.isEnabled = false
+                activeExplosions.remove(at: i)
+            } else {
+                // Expand rapidly then slow down
+                let scale = 0.2 + (progress * progress) * 3.0
+                activeExplosions[i].entity.scale = SIMD3<Float>(repeating: Float(scale))
+
+                // Could add material fade here if we had opacity support
+            }
+        }
+    }
+
     // MARK: - Update Loop
 
     /// Called every frame to update projectiles and effects
@@ -205,13 +257,16 @@ final class WeaponSystem {
             }
         }
 
+        // Update explosion effects
+        updateExplosions(deltaTime: deltaTime)
+
         // Get enemy positions for hit detection
         let enemyPositions = getEnemyPositions()
 
         // Update projectile pools
-        updatePool(autocannonPool, deltaTime: deltaTime, enemyPositions: enemyPositions)
-        updatePool(rocketPool, deltaTime: deltaTime, enemyPositions: enemyPositions)
-        updatePool(heavyGunPool, deltaTime: deltaTime, enemyPositions: enemyPositions)
+        updatePool(autocannonPool, deltaTime: deltaTime, enemyPositions: enemyPositions, isRocket: false)
+        updatePool(rocketPool, deltaTime: deltaTime, enemyPositions: enemyPositions, isRocket: true)
+        updatePool(heavyGunPool, deltaTime: deltaTime, enemyPositions: enemyPositions, isRocket: false)
 
         // Handle continuous fire
         if let coordinator = coordinator, coordinator.isFiring && coordinator.canFire {
@@ -232,14 +287,18 @@ final class WeaponSystem {
         }
     }
 
-    private func updatePool(_ pool: ProjectilePool?, deltaTime: Float, enemyPositions: [(position: SIMD3<Float>, radius: Float)]) {
+    private func updatePool(_ pool: ProjectilePool?, deltaTime: Float, enemyPositions: [(position: SIMD3<Float>, radius: Float)], isRocket: Bool = false) {
         guard let pool = pool else { return }
         guard let enemySystem = coordinator?.enemySystem else {
             // No enemy system, just expire projectiles
             let expired = pool.update(deltaTime: deltaTime)
-            for (entity, _, hitPosition) in expired {
+            for (entity, data, hitPosition) in expired {
                 if let pos = hitPosition {
-                    showImpactSpark(at: pos)
+                    if isRocket || data.splashRadius > 1.0 {
+                        showExplosion(at: pos, radius: data.splashRadius)
+                    } else {
+                        showImpactSpark(at: pos)
+                    }
                 }
                 pool.release(entity)
             }
@@ -251,7 +310,13 @@ final class WeaponSystem {
         for (entity, data, hitPosition) in expired {
             // Show impact effect if hit something
             if let pos = hitPosition {
-                showImpactSpark(at: pos)
+                // Use explosion effect for rockets and high-splash weapons
+                if isRocket || data.splashRadius > 1.0 {
+                    showExplosion(at: pos, radius: data.splashRadius)
+                    coordinator?.audioSystem?.playExplosion()
+                } else {
+                    showImpactSpark(at: pos)
+                }
 
                 // Apply damage to nearby enemies
                 let destroyed = enemySystem.checkProjectileHits(
@@ -267,8 +332,8 @@ final class WeaponSystem {
                     coordinator?.audioSystem?.playExplosion()
                 }
 
-                // Play impact sound if we hit something
-                if !destroyed.isEmpty || data.splashRadius > 0 {
+                // Play impact sound for non-rocket hits
+                if !isRocket && !destroyed.isEmpty {
                     coordinator?.audioSystem?.playImpact(large: data.splashRadius > 1.0)
                 }
             }

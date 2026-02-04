@@ -34,8 +34,19 @@ final class GameCoordinator {
 
     var playerHealth: Int = 100
     var playerMaxHealth: Int = 100
-    var shieldHealth: Int = 50
-    var shieldMaxHealth: Int = 50
+    var shieldHealth: Int = 100
+    var shieldMaxHealth: Int = 100
+
+    /// Time since last damage for shield regen delay
+    var timeSinceLastDamage: TimeInterval = 0
+    /// Delay before shield starts regenerating
+    let shieldRegenDelay: TimeInterval = 3.0
+    /// Shield regeneration rate (points per second)
+    let shieldRegenRate: Float = 10.0
+
+    /// Visual damage feedback - triggers red flash
+    var showDamageFlash: Bool = false
+    var damageFlashTimer: TimeInterval = 0
 
     var isPlayerAlive: Bool { playerHealth > 0 }
     var healthPercent: Float { Float(playerHealth) / Float(playerMaxHealth) }
@@ -197,10 +208,22 @@ final class GameCoordinator {
             coolDown(Float(deltaTime) * 0.3) // Cool down when not firing
         }
 
-        // Regenerate shield slowly
-        if shieldHealth < shieldMaxHealth && shieldHealth > 0 {
-            // Shield regens after not taking damage for a bit
-            // TODO: Add damage cooldown timer
+        // Update damage cooldown
+        timeSinceLastDamage += deltaTime
+
+        // Handle damage flash
+        if showDamageFlash {
+            damageFlashTimer += deltaTime
+            if damageFlashTimer >= 0.15 {
+                showDamageFlash = false
+                damageFlashTimer = 0
+            }
+        }
+
+        // Regenerate shield after delay
+        if shieldHealth < shieldMaxHealth && timeSinceLastDamage >= shieldRegenDelay {
+            let regenAmount = Float(deltaTime) * shieldRegenRate
+            shieldHealth = min(shieldMaxHealth, shieldHealth + Int(regenAmount.rounded(.up)))
         }
 
         // Check player death
@@ -235,14 +258,21 @@ final class GameCoordinator {
         aimScreenPosition = screenPosition
     }
 
-    /// Shows the targeting reticle
+    /// Shows the targeting reticle (kept for compatibility, reticle is always visible now)
     func showReticle() {
-        reticleController?.show()
+        reticleController?.isVisible = true
     }
 
-    /// Hides the targeting reticle
+    /// Hides the targeting reticle (kept for compatibility, but reticle stays visible in WS-023)
     func hideReticle() {
-        reticleController?.hide()
+        // Reticle stays visible per WS-023 - always on during gameplay
+        // reticleController?.hide() -- disabled
+    }
+
+    /// Ensures reticle is visible and positioned (call on mission start)
+    func initializeReticle(at position: SIMD3<Float>) {
+        reticleController?.setPosition(position)
+        reticleController?.isVisible = true
     }
 
     /// Updates reticle animation
@@ -296,6 +326,23 @@ final class GameCoordinator {
 
     func applyDamage(_ amount: Int) {
         guard isPlaying else { return }
+
+        // Reset damage cooldown
+        timeSinceLastDamage = 0
+
+        // Trigger visual feedback
+        showDamageFlash = true
+        damageFlashTimer = 0
+
+        // Trigger camera shake for damage
+        cameraController?.shake(intensity: 0.15, duration: 0.2)
+
+        // Play damage sound
+        if shieldHealth > 0 {
+            audioSystem?.play(.impactSmall) // Shield absorb sound
+        } else {
+            audioSystem?.play(.impactLarge) // Hull damage sound
+        }
 
         // Shield absorbs damage first
         if shieldHealth > 0 {
@@ -451,6 +498,16 @@ enum WeaponType: String, CaseIterable, Identifiable {
         case .rockets: return 20.0
         case .heavyGun: return 80.0
         case .emp: return 15.0
+        }
+    }
+
+    /// HUD color for weapon (cyberpunk palette)
+    var hudColor: Color {
+        switch self {
+        case .autocannon: return .orange
+        case .rockets: return .red
+        case .heavyGun: return .cyan
+        case .emp: return .purple
         }
     }
 }

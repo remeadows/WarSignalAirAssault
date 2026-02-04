@@ -8,7 +8,24 @@
 
 ## Current Milestone
 
-**Milestone 1 — Vertical Slice Foundation**
+**Milestone 3 — Mission Structure & Polish**
+
+**Status**: IN PROGRESS
+
+### Reference Analysis Complete
+Goliath game screenshots analyzed. Key features identified for implementation:
+- Thermal/infrared visual mode
+- Goliath-style reticle (corner brackets, compass rose) ✅ IMPLEMENTED
+- Dual trigger system (ALPHA/BRAVO)
+- Support unit deployment
+- Multi-tier mission objectives
+- Persistent camera movement (AC-130 drift)
+
+---
+
+## Previous Milestone
+
+**Milestone 2 — Combat Loop**
 
 **Status**: ✅ COMPLETE
 
@@ -66,7 +83,7 @@
 
 ### Milestone 2 — Combat Loop
 
-**Status**: NOT STARTED
+**Status**: IN PROGRESS
 
 **Scope**:
 - Multiple weapons (rockets, heavy gun)
@@ -74,6 +91,13 @@
 - Ship takes damage (shield system)
 - HUD polish (health, ammo, weapon select)
 - Objectives system
+
+**Progress**:
+- [x] WS-008: HUD Overlay polish with liquid glass aesthetic
+- [x] WS-012: Ship Shield System with enemy attacks
+- [x] WS-009: Rocket Weapon with splash damage
+- [x] WS-010: Infantry Enemy with movement AI
+- [x] WS-011: Drone Enemy with erratic flight
 
 ### Milestone 3 — Mission Structure
 
@@ -215,3 +239,74 @@ See **ISSUES.md** for full backlog.
 - **Milestone 1 COMPLETE** — All tasks finished
 - **Created**: COMMIT.md with commit/push instructions
 - **Updated**: GO.md with session summary and next steps
+
+### 2026-02-03 (Milestone 2 Start)
+- **Started Milestone 2**: Combat Loop
+- **Completed WS-008**: HUD Overlay Polish
+  - Added iOS 26 liquid glass effect (`.glassEffect()`) to all HUD panels
+  - Cyberpunk gradient borders on HUD elements
+  - Enhanced HUDBar with segment markers and glow effects
+  - Low-health/shield warning indicators with pulsing glow
+  - Heat gauge with gradient fill and threshold marker
+  - Weapon-specific color coding throughout HUD
+  - Fire button updates to match selected weapon color
+  - Weapon selector with selection animation and glow
+  - Score display with gold gradient
+  - Timer turns red with glow under 30 seconds
+  - Unlimited ammo shown as ∞ for autocannon
+  - Build succeeds on iPhone 17 Pro Max Simulator
+- **Completed WS-012**: Ship Shield System
+  - Shield regeneration (10 HP/sec after 3 sec delay)
+  - Damage cooldown tracking for regen delay
+  - Visual damage flash overlay (red radial gradient)
+  - Low health pulsing vignette effect
+  - Camera shake on player damage
+  - Sound effects for shield vs hull damage
+  - Turret enemy type that attacks the player
+  - Enemy attack system with configurable damage/interval
+  - Muzzle flash effect pool for enemy attacks
+  - Attack timers preserved on enemy respawn
+  - Build succeeds on iPhone 17 Pro Max Simulator
+- **Completed WS-009**: Rocket Weapon
+  - Explosion effect pool (8 effects) with expanding animation
+  - Splash damage using existing radius system
+  - Distinct visual feedback for rocket impacts
+  - Build succeeds on iPhone 17 Pro Max Simulator
+- **Completed WS-010**: Infantry Enemy
+  - MovementConfig struct for mobile enemy configuration
+  - Infantry: 15 HP, seeks objective position
+  - EnemyMovementData with AI state tracking
+  - Seeking behavior toward objective
+  - Deals damage when reaching objective
+  - Taller/thinner visual shape
+  - Build succeeds on iPhone 17 Pro Max Simulator
+- **Completed WS-011**: Drone Enemy
+  - Drone config: 10 HP, 75 score, fast & fragile
+  - Erratic flight via noise factor (0.7)
+  - Flying movement with height maintenance
+  - Wandering AI with random target points
+  - Disc/saucer mesh shape
+  - Can attack player (8 damage, 3 sec interval)
+  - Build succeeds on iPhone 17 Pro Max Simulator
+- **Milestone 2 Core Combat Loop COMPLETE** — All planned tasks finished
+
+### 2026-02-03 (Milestone 3 Start)
+- **Analyzed Goliath Reference**: Screenshots captured from iPhone Mirroring
+  - Mission objectives screen with multi-tier progress tracking
+  - Settings menu with HUD toggles
+  - Gameplay view with thermal vision and tactical reticle
+  - Support units selection grid (13 deployables)
+  - Mission summary with kill counts
+- **Implemented Goliath-Style Reticle**:
+  - 4 L-shaped corner brackets
+  - Center crosshair lines with gap
+  - Pulsing center dot
+  - Diamond compass markers (N/E/S/W)
+  - Cyan normal / red target colors
+- **Identified Core Issues** (from playtesting):
+  1. No AC-130 movement feel (camera static)
+  2. Enemies at bottom = instant death (no counterplay)
+  3. Shooting boxes/dots (placeholder graphics)
+  4. Can't change weapons during gameplay
+  5. Reticle not always visible
+  6. RealityKit suitability question

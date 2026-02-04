@@ -15,13 +15,59 @@ The game prioritizes:
 
 ---
 
+## Reference Game: Goliath
+
+WarSignal is directly inspired by **Goliath** (iOS AC-130 gunship game). Key features to emulate:
+
+### Visual Style
+- **Grayscale thermal/infrared view** — monochrome battlefield with high contrast
+- **Military HUD aesthetic** — tactical crosshair, minimal chrome
+- **Enemy markers** — red diamonds on hostiles, white on friendlies/neutrals
+
+### Reticle Design
+- **Corner L-brackets** — 4 corners framing the target area
+- **Compass rose** — N/E/S/W cardinal markers
+- **Center crosshair** — thin lines with gap, pulsing dot
+- **Magnification indicator** — "MAGNIFICATION 10X" style zoom display
+
+### Weapons (Goliath Reference)
+- **ALPHA trigger** — Primary weapon (TALON, HELLFIRE, D.BREATH, FIREBIRD)
+- **BRAVO trigger** — Secondary/support weapon
+- **Weapon bar** — Horizontal selection at bottom of screen
+- **Cooldown/reload indicators** — Per-weapon status
+
+### Support Units (Goliath Reference)
+- **UAV** — Reconnaissance
+- **Sentry Gun** — Automated defense
+- **Contractor** — Ground troops
+- **Mortars** — Artillery support
+- **Humvee/Bradley/Abrams** — Ground vehicles
+- **Blackhawk/Littlebird/Apache** — Air support
+- **F15/Warthog** — Air strikes
+- Levels system (Lv.1 - Lv.8) for upgrades
+
+### Mission Structure (Goliath Reference)
+- **Multi-tier objectives** — Primary + bonus challenges
+- **Progress tracking** — "10/25 WARPIGS DESTROYED" style
+- **Time challenges** — "Complete in 05:00"
+- **Weapon-specific challenges** — "Kill X with tactical bombs"
+- **Mission summary** — Kill counts by enemy type + rewards
+
+### Settings (Goliath Reference)
+- Graphics quality, framerate, vibration
+- HUD toggles: healthbars, hitmarkers, combat log, kill cam, floating damage
+- Fire button layout options (ALPHA | BRAVO)
+
+---
+
 ## Core Design Pillars
 
 1. **Top-Down 3D Combat**
    - Angled overhead camera (45-60 degrees)
-   - Zoom levels for tactical clarity
+   - Zoom levels for tactical clarity (with MAGNIFICATION display)
    - Clear silhouettes and contrast
    - No first-person or cockpit view
+   - **Slow camera drift/orbit** — AC-130 circling feel
 
 2. **Weapon Feel Over Visual Fidelity**
    - Hit feedback, sound, recoil, camera shake
@@ -142,11 +188,15 @@ This is not a full ECS framework—just disciplined separation.
 
 ## Weapons
 
-Baseline weapon classes:
-- **Autocannon** (rapid fire, low damage per hit)
-- **Rockets** (slow, splash damage)
-- **Heavy gun** (high damage, slow ROF)
-- **EMP / Smart Bomb** (unlock, area effect)
+### Cyberpunk Weapon Classes (WarSignal)
+- **Autocannon** (rapid fire, low damage per hit) — TALON equivalent
+- **Rockets** (slow, splash damage) — HELLFIRE equivalent
+- **Heavy gun** (high damage, slow ROF) — D.BREATH equivalent
+- **EMP / Smart Bomb** (unlock, area effect) — FIREBIRD equivalent
+
+### Dual Trigger System (Goliath-Style)
+- **ALPHA** — Primary weapon, main damage dealer
+- **BRAVO** — Secondary weapon, support/utility
 
 Weapon traits:
 - Damage

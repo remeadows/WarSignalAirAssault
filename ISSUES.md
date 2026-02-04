@@ -15,7 +15,147 @@ When this file exceeds **200 lines**, move completed items to `ISSUES_ARCHIVE.md
 
 ---
 
-## Active Sprint (Milestone 1)
+## Active Sprint (Milestone 3)
+
+### WS-023: Always-On Reticle
+
+**Priority**: P0 — Blocker
+**Status**: 🔴 NOT STARTED
+**Type**: UX Fix
+**Milestone**: M3
+
+**Description**: Reticle currently only shows when touching screen. For Simulator/desktop testing and better gameplay, reticle should always be visible. Color/state changes indicate target lock.
+
+**Acceptance Criteria**:
+- [ ] Reticle visible at all times during gameplay
+- [ ] Follows touch/mouse position
+- [ ] Color changes: cyan (normal) → red (valid target)
+- [ ] Works in iOS Simulator with mouse
+
+---
+
+### WS-024: AC-130 Camera Drift
+
+**Priority**: P1 — High
+**Status**: 🔴 NOT STARTED
+**Type**: Feature
+**Milestone**: M3
+
+**Description**: Camera should slowly drift/orbit to simulate AC-130 gunship circling the target area. This is core to the Goliath/Zombie Gunship feel.
+
+**Acceptance Criteria**:
+- [ ] Camera slowly orbits around battlefield center
+- [ ] Orbit speed configurable (default: ~30 sec full rotation)
+- [ ] Player can still aim anywhere on visible area
+- [ ] Ground scrolls beneath camera
+
+---
+
+### WS-025: Weapon Switching During Gameplay
+
+**Priority**: P1 — High
+**Status**: 🔴 NOT STARTED
+**Type**: Bug/Feature
+**Milestone**: M3
+
+**Description**: Weapon buttons in HUD exist but may not be functional. Need to verify and fix weapon switching.
+
+**Acceptance Criteria**:
+- [ ] Tapping weapon button changes active weapon
+- [ ] Visual feedback on selected weapon
+- [ ] Different weapons have distinct projectiles
+- [ ] Ammo/cooldown updates per weapon
+
+---
+
+### WS-026: Thermal/Infrared Visual Mode
+
+**Priority**: P2 — Medium
+**Status**: 🔴 NOT STARTED
+**Type**: Feature (Goliath-inspired)
+**Milestone**: M3
+
+**Description**: Implement grayscale thermal vision mode like Goliath. Enemies should be bright (hot), terrain dark, with high contrast.
+
+**Acceptance Criteria**:
+- [ ] Full-screen grayscale/sepia post-process effect
+- [ ] Enemies glow bright (white/yellow)
+- [ ] Terrain is dark gray
+- [ ] Player can toggle thermal on/off
+- [ ] "MAGNIFICATION" indicator in HUD
+
+---
+
+### WS-027: Dual Trigger System (ALPHA/BRAVO)
+
+**Priority**: P2 — Medium
+**Status**: 🔴 NOT STARTED
+**Type**: Feature (Goliath-inspired)
+**Milestone**: M3
+
+**Description**: Replace single fire button with ALPHA (left) and BRAVO (right) triggers like Goliath.
+
+**Acceptance Criteria**:
+- [ ] Two fire buttons at bottom of screen
+- [ ] ALPHA fires primary weapon
+- [ ] BRAVO fires secondary weapon
+- [ ] Each trigger has independent cooldown
+
+---
+
+### WS-028: Support Unit System
+
+**Priority**: P3 — Low
+**Status**: 🔴 NOT STARTED
+**Type**: Feature (Goliath-inspired)
+**Milestone**: M3+
+
+**Description**: Deployable support units (UAV, Sentry Gun, Mortars, etc.) that assist the player.
+
+**Acceptance Criteria**:
+- [ ] Support selection UI (grid like Goliath)
+- [ ] At least 3 support types implemented
+- [ ] Cooldown between deployments
+- [ ] Support units have levels/upgrades
+
+---
+
+### WS-029: Enemy Visual Upgrade
+
+**Priority**: P2 — Medium
+**Status**: 🔴 NOT STARTED
+**Type**: Polish
+**Milestone**: M3
+
+**Description**: Replace colored boxes with recognizable enemy silhouettes. Doesn't need to be detailed models—clear shapes are fine.
+
+**Acceptance Criteria**:
+- [ ] Infantry: humanoid shape
+- [ ] Drone: disc/quad shape
+- [ ] Vehicle: rectangular with treads
+- [ ] Turret: base + barrel
+- [ ] Enemy healthbars (optional toggle)
+
+---
+
+### WS-030: Ship Defense Clarity
+
+**Priority**: P1 — High
+**Status**: 🔴 NOT STARTED
+**Type**: UX Fix
+**Milestone**: M3
+
+**Description**: When enemies reach the bottom of screen, player dies with no feedback. Need clear "ship area" visualization and warning system.
+
+**Acceptance Criteria**:
+- [ ] Visual indicator of ship/objective area
+- [ ] Warning when enemies approach objective
+- [ ] Clear feedback when objective takes damage
+- [ ] Not instant death—damage over time or per enemy
+
+---
+
+## Archived (Milestone 1-2)
 
 ### WS-014: Fix MainMenuView Title Cutoff in Landscape
 
@@ -282,64 +422,138 @@ When this file exceeds **200 lines**, move completed items to `ISSUES_ARCHIVE.md
 
 ## Backlog (Future Milestones)
 
-### WS-008: HUD Overlay
+### WS-008: HUD Overlay Polish
 
 **Priority**: P2 — Medium
-**Milestone**: M1/M2
+**Status**: ✅ COMPLETE
+**Completed**: 2026-02-03
+**Milestone**: M2
 
-- Health display
-- Ammo/heat display
-- Weapon selector
-- Mission timer
-- Pause button
+**Implementation**:
+- iOS 26 liquid glass effect (`.glassEffect()`) on all HUD panels
+- Cyberpunk gradient borders (cyan/purple, orange/yellow)
+- Enhanced HUDBar with segment markers and glow effects
+- Low-health/shield warning indicators with pulsing glow
+- Heat gauge with gradient fill and threshold marker at 70%
+- Weapon-specific color coding (hudColor property on WeaponType)
+- Fire button dynamically updates to match selected weapon
+- Weapon selector with selection animation and glow
+- Score display with gold gradient text
+- Timer warning state (red + glow under 30 seconds)
+- Unlimited ammo displayed as ∞ for autocannon
+
+**Acceptance Criteria**:
+- [x] Health display with low-health warning
+- [x] Shield display with depleted warning
+- [x] Ammo/heat display with gradient fills
+- [x] Weapon selector with visual feedback
+- [x] Mission timer with warning state
+- [x] Cyberpunk/liquid glass aesthetic
 
 ---
 
 ### WS-009: Rocket Weapon
 
 **Priority**: P2 — Medium
+**Status**: ✅ COMPLETE
+**Completed**: 2026-02-03
 **Milestone**: M2
 
-- Slower projectile travel
-- Splash damage radius
-- Explosion effect
-- Distinct audio from autocannon
+**Implementation**:
+- Rocket projectile pool (15 capacity, larger/slower than autocannon)
+- Splash damage radius (3.0 units) configured in WeaponType
+- Explosion effect pool (8 effects) with expanding animation
+- Distinct orange rocket visual with higher emissive intensity
+- Rocket fire sound via AudioSystem
+- Explosion sound on impact
+- Splash damage hits multiple enemies in radius
+
+**Acceptance Criteria**:
+- [x] Slower projectile travel (20 vs 50 speed)
+- [x] Splash damage radius (3.0 units)
+- [x] Explosion effect (expanding orange sphere)
+- [x] Distinct audio from autocannon
 
 ---
 
 ### WS-010: Infantry Enemy
 
 **Priority**: P2 — Medium
+**Status**: ✅ COMPLETE
+**Completed**: 2026-02-03
 **Milestone**: M2
 
-- Wander behavior (simple state machine)
-- Seek objective movement
-- Low HP (~1-2 autocannon hits)
-- Death animation (ragdoll or fade)
+**Implementation**:
+- MovementConfig struct for mobile enemy settings
+- Infantry enemy config (15 HP, 50 score, fast respawn)
+- EnemyMovementData tracking per enemy (state, target, timer)
+- AIState enum (wandering, seeking)
+- Seeking behavior toward objective position
+- Deals damage to player when reaching objective
+- Movement speed: 2.0 (wander) / 3.0 (seek)
+- Taller/thinner visual shape for infantry
+- 5 infantry spawned initially
+- Movement data preserved through respawn
+
+**Acceptance Criteria**:
+- [x] Wander/seek behavior (AI state machine)
+- [x] Seek objective movement
+- [x] Low HP (15 - ~2 autocannon hits)
+- [x] Damage player on reaching objective
 
 ---
 
 ### WS-011: Drone Enemy
 
 **Priority**: P3 — Low
+**Status**: ✅ COMPLETE
+**Completed**: 2026-02-03
 **Milestone**: M2
 
-- Fast movement
-- Fragile (1 hit)
-- Erratic flight pattern
-- Can damage player ship
+**Implementation**:
+- Drone config: 10 HP (1-hit from most weapons), 75 score
+- Flying movement with height maintenance
+- Erratic flight pattern via noise factor (0.7)
+- Fast speed (6.0 wander, 4.0 seek)
+- Wandering AI state with random target points
+- Cylinder/disc mesh for saucer shape
+- Attacks player (8 damage, 3 sec interval)
+- 3 drones spawned initially at varying heights
+- Respawns with flying movement preserved
+
+**Acceptance Criteria**:
+- [x] Fast movement (6.0 speed)
+- [x] Fragile (10 HP - 1 autocannon hit)
+- [x] Erratic flight pattern (noise-based wandering)
+- [x] Can damage player ship (8 damage)
 
 ---
 
 ### WS-012: Ship Shield System
 
 **Priority**: P2 — Medium
+**Status**: ✅ COMPLETE
+**Completed**: 2026-02-03
 **Milestone**: M2
 
-- Shield HP separate from hull HP
-- Shield recharges over time
-- Visual shield effect
-- Shield break feedback
+**Implementation**:
+- Shield regeneration system (10 HP/sec after 3 sec delay)
+- Damage cooldown tracking (`timeSinceLastDamage`)
+- Visual damage flash overlay (red radial gradient)
+- Low health vignette with pulsing effect
+- Camera shake on damage
+- Sound effects for shield/hull damage
+- Turret enemy type that attacks player
+- Enemy attack system with muzzle flash effects
+- Attack timers per enemy
+- Respawn preserves enemy attack capability
+
+**Acceptance Criteria**:
+- [x] Shield HP separate from hull HP
+- [x] Shield recharges over time (after 3 sec delay)
+- [x] Visual damage feedback (flash + vignette)
+- [x] Camera shake on damage
+- [x] Enemies can attack player
 
 ---
 
