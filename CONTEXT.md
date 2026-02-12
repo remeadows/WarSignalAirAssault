@@ -188,11 +188,11 @@ This is not a full ECS framework—just disciplined separation.
 
 ## Weapons
 
-### Cyberpunk Weapon Classes (WarSignal)
-- **Autocannon** (rapid fire, low damage per hit) — TALON equivalent
-- **Rockets** (slow, splash damage) — HELLFIRE equivalent
-- **Heavy gun** (high damage, slow ROF) — D.BREATH equivalent
-- **EMP / Smart Bomb** (unlock, area effect) — FIREBIRD equivalent
+### Cyberpunk Weapon Classes (WarSignal — Names LOCKED)
+- **Vulcan** (rapid fire, 20mm gatling, 120 DPS) — TALON equivalent
+- **Havoc** (guided rockets, splash damage, 33.3 DPS) — HELLFIRE equivalent
+- **Reaper** (heavy ordnance, max single-target, 40 DPS) — D.BREATH equivalent
+- **TBD** (unlock, area-denial EMP/smart bomb) — FIREBIRD equivalent
 
 ### Dual Trigger System (Goliath-Style)
 - **ALPHA** — Primary weapon, main damage dealer
@@ -279,17 +279,54 @@ Audio is a first-class system, not an afterthought.
 
 ---
 
+## Monetization & Economy (LOCKED 2026-02-12)
+
+### Monetization Model
+- **Premium: $4.99 launch price** — No IAP, no ads, no energy timers, no dual currency
+- Single currency: **Credits**
+- Positioning: "Pay once, play forever. No BS."
+- Tier to $6.99 post-launch if reviews hit 4.7+ stars
+
+### Campaign Structure
+- **10 levels**, 2-4 hours core campaign
+- Star ratings: Survivor (1★), Operator (2★), Ace (3★)
+- Star reward multipliers: 1.0x / 1.25x / 1.5x
+- **New Game+**: Keep upgrades, +15% enemy density, +20% rewards
+
+### Economy Targets
+- Total upgrade cost: ~39,800 Credits
+- Target unlock: **90% tech tree on skilled first playthrough** (2★ average)
+- Remaining 10% via NG+ earnings
+- **S-curve cost model**: Cheap early tiers (flow), expensive late tiers (mastery)
+- **No respec mechanic in v1** — economy generous enough that bad paths are recoverable
+
+### Key Economy Moment
+- **"The Reaper Breakpoint"**: Reaper upgrade to 1-shot tanks affordable at Level 5 (~10K cumulative credits)
+- This is the primary power fantasy payoff — engineered into the economy curve
+
+### Weapons (Canonical Names — LOCKED 2026-02-12)
+
+| Slot | Name | Identity | Base DPS |
+|------|------|----------|----------|
+| Primary (ALPHA) | **Vulcan** | 20mm rapid-fire gatling | 120 DPS |
+| Secondary (BRAVO) | **Havoc** | Guided rockets, splash damage | 33.3 DPS |
+| Heavy | **Reaper** | Heavy ordnance, max single-target | 40 DPS |
+| Unlock (endgame) | **TBD** | Area-denial EMP/smart bomb | TBD |
+
+---
+
 ## Progression
 
 Early progression:
 - Mission completion
-- Currency rewards
-- Weapon upgrades
-- Ship repairs/upgrades
+- Credit rewards (base + secondaries + first-clear + star multiplier)
+- Weapon upgrades (3 categories × 4-5 tiers per weapon)
+- Ship defense upgrades (Hull, Flares, ECM, Repair)
+- Ground team upgrades (Armor, Weapons, Medic, Recon, APC)
 
 Persistence:
-- UserDefaults (initial)
-- Migrate to file-based save later if needed
+- File-based save with versioned envelope, backup, and migration (Codex SaveManager)
+- NG+ flag + persistent upgrade state
 
 No online services in v1.
 

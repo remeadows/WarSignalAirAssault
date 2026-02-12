@@ -126,6 +126,23 @@ Goliath game screenshots analyzed. Key features identified for implementation:
 - **Trade-offs**: No portrait support
 - **Documented in**: CONTEXT.md, CLAUDE.md
 
+### 2026-02-12: Economy Decisions Locked (Post-Grok Analysis)
+- **Decision 8**: Price locked at $4.99 (both Gemini + Grok converge)
+- **Decision 9**: 90% tech tree unlock on skilled first playthrough (Grok's recommendation over Gemini's 85%)
+- **Decision 10**: No respec mechanic in v1 (economy generous enough; v1.1 candidate)
+- **Decision 11**: S-curve cost model adopted for all upgrade paths
+- **Analysis**: Grok's reward formula overshoots at 2★ (109% vs 90% target) — Gemini must adjust ~10% downward
+- **Documented in**: PROJECT_PLAN_20260212.md Section 8, CONTEXT.md Economy section
+
+### 2026-02-12: Grok Economy Response Analyzed
+- **Source**: GROK_ECONOMY_RESPONSE.md (response to GROK_ECONOMY_PROMPT.md)
+- **Verdict**: Useful directional inputs, weak on numerical detail
+- **Adopted**: $4.99 price, 90% target, S-curve costs, NG+ framework, Reaper breakpoint at L5
+- **Rejected**: Respec mechanic (scope risk, SaveManager complexity)
+- **Problem found**: Reward formula gives 109% at 2★ — exceeds 90% target
+- **Full credit table calculated** and recorded in PROJECT_PLAN Section 8
+- **New issues**: WS-031 (economy JSON), WS-032 (economy simulation), WS-033 (NG+ system)
+
 ### 2025-02-03: Documentation Standardization
 - **Decision**: Create CLAUDE.md as comprehensive quick-reference
 - **Rationale**: New context windows need single-page bootstrap, reduces doc review time

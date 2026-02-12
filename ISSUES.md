@@ -420,6 +420,80 @@ When this file exceeds **200 lines**, move completed items to `ISSUES_ARCHIVE.md
 
 ---
 
+## Economy & Progression Tasks (Phase 2-5)
+
+### WS-031: Final Economy JSON — Gemini Deliverable
+
+**Priority**: P1 — High
+**Status**: 🔴 NOT STARTED
+**Type**: Design (Gemini → Codex schema → Claude Code implements)
+**Milestone**: Phase 2.1 / Phase 5.1
+**Depends On**: Economy decisions locked (DONE)
+
+**Description**: Gemini must produce the final economy.json with:
+- Adjusted credit rewards (~10% lower than Grok's formula) to hit 90% unlock at 2★ average
+- S-curve cost tiers for all 45+ upgrade paths
+- Full 10-row level reward table (base, secondaries, first-clear, star totals, cumulative)
+- NG+ reward modifiers
+
+**Acceptance Criteria**:
+- [ ] 2★ average total income = ~35,800 Credits (90% of 39,800)
+- [ ] 1★ average = ~30,000 (75% — core tree)
+- [ ] 3★ average = ~44,000 (110% — full tree + surplus)
+- [ ] S-curve costs applied to all upgrade trees
+- [ ] Reaper max-damage affordable at Level 5 cumulative (~10K)
+- [ ] JSON schema validated by Codex ConfigLoader
+
+---
+
+### WS-032: Economy Simulation Validation — Gemini CLI
+
+**Priority**: P2 — Medium
+**Status**: 🔴 NOT STARTED
+**Type**: QA (Gemini CLI)
+**Milestone**: Phase 5 Gate
+**Depends On**: WS-031
+
+**Description**: Gemini CLI runs economy simulations through 3 player paths:
+1. **Optimal path**: Reaper > Ground > Vulcan sustain (smart player)
+2. **Average path**: Balanced spending, some waste
+3. **Trap path**: Over-invest defenses early, ignore Reaper
+
+All paths must be completable without grinding. Trap path should be uncomfortable but not a hard wall.
+
+**Acceptance Criteria**:
+- [ ] Optimal path: 95%+ tree, Reaper breakpoint by Level 5
+- [ ] Average path: 85-90% tree, campaign completable
+- [ ] Trap path: 70-80% tree, campaign still completable (harder)
+- [ ] No level requires grinding previous levels to proceed
+- [ ] NG+ economy funds remaining 10% within 3-5 replayed levels
+
+---
+
+### WS-033: NG+ System Design
+
+**Priority**: P3 — Low
+**Status**: 🔴 NOT STARTED
+**Type**: Design + Implementation
+**Milestone**: Phase 5.3
+**Depends On**: WS-031
+
+**Description**: New Game+ implementation per locked design:
+- Keep all upgrades and credits from first run
+- Enemies: +15% HP, increased density, new spawn patterns
+- Rewards: +20% credit multiplier
+- New secondary objectives per level
+- No HP sponge mode — scale density and variety
+
+**Acceptance Criteria**:
+- [ ] NG+ flag in save data
+- [ ] All upgrades persist across NG+ transition
+- [ ] Enemy density/HP modifiers applied
+- [ ] Reward multiplier active
+- [ ] At least 1 new secondary objective per level in NG+
+
+---
+
 ## Backlog (Future Milestones)
 
 ### WS-008: HUD Overlay Polish
